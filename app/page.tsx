@@ -25,10 +25,10 @@ const ROLE_HIERARCHY = {
 
 export default function ShitbinApp() {
   const [page, setPage] = useState('login');
-  const [pastes, setPastes] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [selectedPaste, setSelectedPaste] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [pastes, setPastes] = useState<any[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
+  const [selectedPaste, setSelectedPaste] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [expiration, setExpiration] = useState('never');
@@ -39,7 +39,7 @@ export default function ShitbinApp() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
-  const [reports, setReports] = useState([]);
+  const [reports, setReports] = useState<any[]>([]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('shitbin_user');
@@ -62,7 +62,7 @@ export default function ShitbinApp() {
         .limit(100);
 
       if (error) throw error;
-     setPastes((data || []) as any);
+      setPastes((data as any) || []);
     } catch (err) {
       console.error('Error fetching pastes:', err);
     }
@@ -76,7 +76,7 @@ export default function ShitbinApp() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setUsers(data || []);
+      setUsers((data as any) || []);
     } catch (err) {
       console.error('Error fetching users:', err);
     }
@@ -90,7 +90,7 @@ export default function ShitbinApp() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setReports(data || []);
+      setReports((data as any) || []);
     } catch (err) {
       console.error('Error fetching reports:', err);
     }
@@ -171,7 +171,7 @@ export default function ShitbinApp() {
       fetchUsers();
     } catch (err) {
       console.error('Error registering:', err);
-      alert('Registration failed: ' + err.message);
+      alert('Registration failed: ' + (err as any).message);
     }
     setLoading(false);
   };
@@ -230,7 +230,7 @@ export default function ShitbinApp() {
       fetchReports();
     } catch (err) {
       console.error('Error logging in:', err);
-      alert('Login failed: ' + err.message);
+      alert('Login failed: ' + (err as any).message);
     }
     setLoading(false);
   };
@@ -249,7 +249,7 @@ export default function ShitbinApp() {
     return currentUser && ROLE_HIERARCHY[currentUser.role] >= ROLE_HIERARCHY.admin;
   };
 
-  const canEdit = (pasteCreatorId) => {
+  const canEdit = (pasteCreatorId: any) => {
     if (!currentUser) return false;
     if (ROLE_HIERARCHY[currentUser.role] >= ROLE_HIERARCHY.admin) return true;
     return currentUser.id === pasteCreatorId;
@@ -296,7 +296,7 @@ export default function ShitbinApp() {
   };
 
   const getExpirationMs = () => {
-    const expirations = {
+    const expirations: any = {
       '1h': 3600000,
       '24h': 86400000,
       '7d': 604800000,
@@ -305,7 +305,7 @@ export default function ShitbinApp() {
     return expirations[expiration] || 0;
   };
 
-  const togglePinPost = async (id, currentPinned) => {
+  const togglePinPost = async (id: any, currentPinned: any) => {
     if (!canAdmin()) {
       alert('Only admins can pin posts.');
       return;
@@ -328,7 +328,7 @@ export default function ShitbinApp() {
     setLoading(false);
   };
 
-  const deletePaste = async (id, creatorId) => {
+  const deletePaste = async (id: any, creatorId: any) => {
     if (!canEdit(creatorId)) {
       alert('You do not have permission to delete this paste.');
       return;
@@ -349,7 +349,7 @@ export default function ShitbinApp() {
     setLoading(false);
   };
 
-  const flagPaste = async (id) => {
+  const flagPaste = async (id: any) => {
     if (!canModerate()) {
       alert('You must be a moderator to flag content.');
       return;
@@ -373,7 +373,7 @@ export default function ShitbinApp() {
     setLoading(false);
   };
 
-  const reportPaste = async (pasteId) => {
+  const reportPaste = async (pasteId: any) => {
     if (!currentUser) {
       alert('You must be logged in to report content.');
       return;
@@ -402,7 +402,7 @@ export default function ShitbinApp() {
     setLoading(false);
   };
 
-  const dismissReport = async (reportId) => {
+  const dismissReport = async (reportId: any) => {
     if (!canModerate()) {
       alert('You do not have permission to dismiss reports.');
       return;
@@ -422,7 +422,7 @@ export default function ShitbinApp() {
     setLoading(false);
   };
 
-  const updateUserRole = async (userId, newRole) => {
+  const updateUserRole = async (userId: any, newRole: any) => {
     if (!canAdmin()) {
       alert('You do not have permission to manage users.');
       return;
@@ -445,7 +445,7 @@ export default function ShitbinApp() {
     setLoading(false);
   };
 
-  const deleteUser = async (userId) => {
+  const deleteUser = async (userId: any) => {
     if (!canAdmin()) {
       alert('You do not have permission to manage users.');
       return;
@@ -469,7 +469,7 @@ export default function ShitbinApp() {
     setLoading(false);
   };
 
-  const openPaste = (paste) => {
+  const openPaste = (paste: any) => {
     setSelectedPaste(paste);
     setPage('view');
   };
@@ -493,7 +493,7 @@ export default function ShitbinApp() {
       const { data, error } = await query.order('pinned', { ascending: false }).order('created_at', { ascending: false });
 
       if (error) throw error;
-      setPastes(data || []);
+      setPastes((data as any) || []);
     } catch (err) {
       console.error('Error searching:', err);
     }
