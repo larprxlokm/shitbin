@@ -9,14 +9,16 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-const ROLES = {
+type Role = 'user' | 'moderator' | 'admin' | 'founder';
+
+const ROLES: Record<Role, string> = {
   user: 'User',
   moderator: 'Moderator',
   admin: 'Admin',
   founder: 'Founder'
 };
 
-const ROLE_HIERARCHY = {
+const ROLE_HIERARCHY: Record<Role, number> = {
   user: 0,
   moderator: 1,
   admin: 2,
@@ -242,16 +244,16 @@ export default function ShitbinApp() {
   };
 
   const canModerate = () => {
-    return currentUser && ROLE_HIERARCHY[currentUser.role] >= ROLE_HIERARCHY.moderator;
+    return currentUser && ROLE_HIERARCHY[currentUser.role as Role] >= ROLE_HIERARCHY.moderator;
   };
 
   const canAdmin = () => {
-    return currentUser && ROLE_HIERARCHY[currentUser.role] >= ROLE_HIERARCHY.admin;
+    return currentUser && ROLE_HIERARCHY[currentUser.role as Role] >= ROLE_HIERARCHY.admin;
   };
 
   const canEdit = (pasteCreatorId: any) => {
     if (!currentUser) return false;
-    if (ROLE_HIERARCHY[currentUser.role] >= ROLE_HIERARCHY.admin) return true;
+    if (ROLE_HIERARCHY[currentUser.role as Role] >= ROLE_HIERARCHY.admin) return true;
     return currentUser.id === pasteCreatorId;
   };
 
@@ -437,7 +439,7 @@ export default function ShitbinApp() {
 
       if (error) throw error;
       fetchUsers();
-      alert(`User role updated to ${ROLES[newRole]}`);
+      alert(`User role updated to ${ROLES[newRole as Role]}`);
     } catch (err) {
       console.error('Error updating user role:', err);
       alert('Failed to update user role.');
@@ -577,7 +579,7 @@ export default function ShitbinApp() {
               </a>
               <div className="flex items-center gap-4 ml-6 pl-6 border-l border-cyan-600/30">
                 <span className="text-xs text-cyan-500">
-                  @{currentUser.username} • <span className="text-cyan-300">{ROLES[currentUser.role]}</span>
+                  @{currentUser.username} • <span className="text-cyan-300">{ROLES[currentUser.role as Role]}</span>
                 </span>
                 <button
                   onClick={logout}
@@ -782,7 +784,7 @@ export default function ShitbinApp() {
                           {paste.title} {paste.flagged && <span className="text-red-400 text-xs ml-2">[FLAGGED]</span>}
                         </td>
                         <td className="py-3 px-4 text-cyan-600">
-                          @{paste.creator?.username} <span className="text-cyan-700">({ROLES[paste.creator?.role] || 'User'})</span>
+                          @{paste.creator?.username} <span className="text-cyan-700">({ROLES[paste.creator?.role as Role] || 'User'})</span>
                         </td>
                         <td className="py-3 px-4 text-cyan-700">
                           {new Date(paste.created_at).toLocaleDateString()}
@@ -828,7 +830,7 @@ export default function ShitbinApp() {
                       return (
                         <tr key={user.id} className="border-b border-cyan-600/10 hover:bg-cyan-600/5 transition">
                           <td className="py-3 px-4 text-cyan-400">@{user.username}</td>
-                          <td className="py-3 px-4 text-cyan-600">{ROLES[user.role]}</td>
+                          <td className="py-3 px-4 text-cyan-600">{ROLES[user.role as Role]}</td>
                           <td className="py-3 px-4 text-cyan-600">{userPasteCount}</td>
                           <td className="py-3 px-4 text-cyan-700">
                             {new Date(user.created_at).toLocaleDateString()}
@@ -916,7 +918,7 @@ export default function ShitbinApp() {
                     {selectedPaste.flagged && <span className="text-red-400 text-sm ml-2">[FLAGGED]</span>}
                   </h2>
                   <p className="text-cyan-700 text-sm">
-                    By: <span className="text-cyan-500">@{selectedPaste.creator?.username}</span> ({ROLES[selectedPaste.creator?.role] || 'User'}) • Created:{' '}
+                    By: <span className="text-cyan-500">@{selectedPaste.creator?.username}</span> ({ROLES[selectedPaste.creator?.role as Role] || 'User'}) • Created:{' '}
                     <span className="text-cyan-600">{new Date(selectedPaste.created_at).toLocaleString()}</span>
                   </p>
                 </div>
