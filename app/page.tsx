@@ -62,7 +62,7 @@ export default function ShitbinApp() {
         .limit(100);
 
       if (error) throw error;
-      setPastes(data || []);
+     setPastes((data || []) as any);
     } catch (err) {
       console.error('Error fetching pastes:', err);
     }
