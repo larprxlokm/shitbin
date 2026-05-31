@@ -575,7 +575,7 @@ export default function ShitbinApp() {
                 rel="noopener noreferrer"
                 className="text-sm uppercase tracking-widest text-blue-500 hover:text-blue-400 transition"
               >
-                📱 TG
+                 TG
               </a>
               <div className="flex items-center gap-4 ml-6 pl-6 border-l border-cyan-600/30">
                 <span className="text-xs text-cyan-500">
@@ -659,8 +659,8 @@ export default function ShitbinApp() {
                     </button>
 
                     <div className="text-cyan-700 text-xs pt-4 border-t border-cyan-600/20">
-                      <p className="mb-2"><span className="text-cyan-300">⭐ FIRST USER:</span> Becomes owner/founder with full control</p>
-                      <p><span className="text-cyan-300">👥 OTHERS:</span> Start as regular users</p>
+                      <p className="mb-2"><span className="text-cyan-300">n</span> n</p>
+                      <p><span className="text-cyan-300">n:</span> ns</p>
                     </div>
                   </>
                 ) : (
